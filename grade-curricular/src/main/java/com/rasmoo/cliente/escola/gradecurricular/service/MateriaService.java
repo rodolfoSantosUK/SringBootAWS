@@ -1,4 +1,4 @@
-package com.rasmoo.cliente.escola.gradecurricular.service;
+package com.rasmoo.cliente.escola.gradecurricular.service  ;
 
 import com.rasmoo.cliente.escola.gradecurricular.controller.MateriaController;
 import com.rasmoo.cliente.escola.gradecurricular.dto.MateriaDto;
