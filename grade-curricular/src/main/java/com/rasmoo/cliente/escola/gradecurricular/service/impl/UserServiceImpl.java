@@ -5,6 +5,7 @@ import java.util.List;
 import com.rasmoo.cliente.escola.gradecurricular.entity.UserEntity;
 import com.rasmoo.cliente.escola.gradecurricular.repository.UserRepository;
 import com.rasmoo.cliente.escola.gradecurricular.service.UserService;
+import com.rasmoo.cliente.escola.gradecurricular.shared.Utils;
 import com.rasmoo.cliente.escola.gradecurricular.shared.dto.UserDto;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,19 +16,28 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
+    private final Utils utils;
+
     @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, Utils utils) {
         this.userRepository = userRepository;
+        this.utils = utils;
     }
+
+
 
     @Override
     public UserDto createUser(UserDto user) {
 
+        if(userRepository.findByEmail(user.getEmail())  != null) throw new RuntimeException("Record already exist") ;
+
         UserEntity userEntity = new UserEntity();
         BeanUtils.copyProperties(user, userEntity);
 
+        String publicUserId = utils.generateUserId(30);
+
         userEntity.setEncryptedPassword("test");
-        userEntity.setUserId("testUserId");
+        userEntity.setUserId(publicUserId);
 
         UserEntity storedUserDetails = userRepository.save(userEntity);
 
